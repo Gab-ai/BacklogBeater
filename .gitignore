@@ -18,10 +18,6 @@ SCORING.md
 *.userosscache
 *.sln.docstates
 
-# Build output
-bin/
-obj/
-
 # Secrets / local config
 .env
 *.env
@@ -35,3 +31,9 @@ secrets.json
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Build/release artifacts
+dist/
+bin/
+obj/
+*.pext

@@ -1,0 +1,838 @@
+<UserControl x:Class="GameRecommender.RecommenderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GameRecommender">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="TextBrush" Color="#EEF3F8"/>
+        <SolidColorBrush x:Key="TextBrushDarker" Color="#A9B5C6"/>
+        <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#121821"/>
+        <SolidColorBrush x:Key="NormalBorderBrush" Color="#2B3646"/>
+        <SolidColorBrush x:Key="NormalBrush" Color="#263244"/>
+        <SolidColorBrush x:Key="PositiveBrush" Color="#65D2C5"/>
+        <SolidColorBrush x:Key="WarningBrush" Color="#F3C36B"/>
+        <SolidColorBrush x:Key="ThemeSurfaceBrush" Color="#18212D"/>
+        <SolidColorBrush x:Key="ThemeSurfaceHoverBrush" Color="#202B3A"/>
+        <SolidColorBrush x:Key="ThemeSurfacePressedBrush" Color="#111722"/>
+        <SolidColorBrush x:Key="ThemeAccentBrush" Color="#65D2C5"/>
+        <SolidColorBrush x:Key="ThemeAccentSoftBrush" Color="#23434A"/>
+        <SolidColorBrush x:Key="ThemeMascotBrush" Color="#E58ABD"/>
+        <SolidColorBrush x:Key="ThemeDangerBrush" Color="#CF737C"/>
+        <SolidColorBrush x:Key="ThemeDangerHoverBrush" Color="#F08A95"/>
+        <SolidColorBrush x:Key="ThemeDisabledBrush" Color="#657184"/>
+        <SolidColorBrush x:Key="ThemeChipBrush" Color="#24364B"/>
+        <SolidColorBrush x:Key="ThemeFocusBrush" Color="#A4F0E8"/>
+
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource ThemeSurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Resources>
+                <Storyboard x:Key="CardIn">
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.012" Duration="0:0:0.09"/>
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.012" Duration="0:0:0.09"/>
+                </Storyboard>
+                <Storyboard x:Key="CardOut">
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1" Duration="0:0:0.12"/>
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1" Duration="0:0:0.12"/>
+                </Storyboard>
+            </Style.Resources>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderThickness" Value="1.5"/>
+                    <Setter Property="Background" Value="{StaticResource ThemeSurfaceHoverBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource ThemeFocusBrush}"/>
+                </Trigger>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard Storyboard="{StaticResource CardIn}"/>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard Storyboard="{StaticResource CardOut}"/>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SectionLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrushDarker}"/>
+            <Setter Property="Margin" Value="0,12,0,6"/>
+        </Style>
+        <Style x:Key="GameTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+        <Style x:Key="Meta" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrushDarker}"/>
+        </Style>
+        <Style x:Key="FooterButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ThemeSurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="Padding" Value="7,4"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Margin" Value="0,3,6,0"/>
+            <Setter Property="MinWidth" Value="52"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ThemeAccentSoftBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource ThemeAccentBrush}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ThemeSurfacePressedBrush}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{StaticResource ThemeDisabledBrush}"/>
+                    <Setter Property="Opacity" Value="0.65"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="BottomTabButton" TargetType="RadioButton">
+            <Setter Property="Background" Value="{StaticResource ThemeSurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrushDarker}"/>
+            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="MinWidth" Value="118"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ThemeAccentSoftBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource ThemeAccentBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ThemeAccentSoftBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource ThemeAccentBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource ThemeFocusBrush}"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource ThemeFocusBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="IconButton" TargetType="Button">
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="5,0,0,0"/>
+            <Setter Property="MinWidth" Value="24"/>
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="{StaticResource ThemeChipBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource ThemeAccentBrush}"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="10000"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ThemeAccentSoftBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource ThemeAccentBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ThemeSurfacePressedBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource ThemeFocusBrush}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{StaticResource ThemeDisabledBrush}"/>
+                    <Setter Property="Opacity" Value="0.65"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DangerIconButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
+            <Setter Property="Foreground" Value="{StaticResource ThemeDangerBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3E2530"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource ThemeDangerHoverBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource ThemeDangerHoverBrush}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#26151C"/>
+                    <Setter Property="Foreground" Value="#FFD4D8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DangerActionButton" TargetType="Button">
+            <Setter Property="MinWidth" Value="54"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="Margin" Value="5,0,0,0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Background" Value="{StaticResource ThemeChipBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource ThemeDangerBrush}"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="10000"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3E2530"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource ThemeDangerHoverBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource ThemeDangerHoverBrush}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#26151C"/>
+                    <Setter Property="Foreground" Value="#FFD4D8"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{StaticResource ThemeDisabledBrush}"/>
+                    <Setter Property="Opacity" Value="0.65"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="EmptyStateText" TargetType="TextBlock" BasedOn="{StaticResource Meta}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Stats header — no buttons, just numbers -->
+        <Border Grid.Row="0" Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="0,0,0,1" Padding="12,8">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Margin="0,0,14,0">
+                    <TextBlock Text="{Binding TotalGames}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                    <TextBlock Text="games" Style="{StaticResource Meta}"/>
+                </StackPanel>
+                <StackPanel Margin="0,0,14,0">
+                    <TextBlock Text="{Binding UnplayedCount}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource WarningBrush}"/>
+                    <TextBlock Text="unplayed" Style="{StaticResource Meta}"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="{Binding TotalPlaytime}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                    <TextBlock Text="total" Style="{StaticResource Meta}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Search bar -->
+        <Border Grid.Row="1" Padding="10,5" Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="0,0,0,1">
+            <DockPanel>
+                <TextBlock Text="Filter" Style="{StaticResource Meta}" FontWeight="Medium"
+                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBox Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="12" Padding="5,3"
+                         ToolTip="Filter by title, category, genre, tag, keyword, theme, or reason"/>
+            </DockPanel>
+        </Border>
+
+        <!-- Genre mode -->
+        <Border Grid.Row="2" Padding="10,5" Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Category" Style="{StaticResource Meta}"
+                           VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding RecommendationCategories}"
+                          SelectedItem="{Binding SelectedRecommendationCategory}"
+                          FontSize="12" Padding="5,3" Margin="0,0,6,0"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Genre" Style="{StaticResource Meta}"
+                           VerticalAlignment="Center" Margin="2,0,6,0"/>
+                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding GenreText, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="12" Padding="5,3"/>
+                <Button Grid.Row="0" Grid.Column="4" Content="Genre" Padding="8,4" FontSize="11" Margin="6,0,0,0"
+                        Command="{Binding RunGenreCommand}"/>
+                <Button Grid.Row="0" Grid.Column="5" Content="Clear" Padding="8,4" FontSize="11" Margin="6,0,0,0"
+                        Command="{Binding ClearGenreCommand}"/>
+                <Button Grid.Row="0" Grid.Column="6" Content="{Binding ReviewModeToggleText}" Padding="8,4" FontSize="11" Margin="6,0,0,0"
+                        Command="{Binding ToggleReviewModeCommand}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="7"
+                           Text="{Binding FilterSummary}" Style="{StaticResource Meta}"
+                           TextTrimming="CharacterEllipsis" Margin="0,4,0,0"/>
+            </Grid>
+        </Border>
+
+        <!-- AI status bar -->
+        <Border Grid.Row="3" Padding="12,3" Background="{DynamicResource ControlBackgroundBrush}"
+                Visibility="{Binding AiEnabled, Converter={x:Static local:BoolToVisibilityConverter.Instance}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="✦ " FontSize="11" Foreground="{StaticResource ThemeMascotBrush}"/>
+                <TextBlock Style="{StaticResource Meta}">
+                    <TextBlock.Text>
+                        <Binding Path="AiStatusText" FallbackValue="AI re-ranking enabled"/>
+                    </TextBlock.Text>
+                </TextBlock>
+                <ProgressBar IsIndeterminate="True" Width="60" Height="3" Margin="8,0,0,0"
+                             Visibility="{Binding IsAiLoading, Converter={x:Static local:BoolToVisibilityConverter.Instance}}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main content -->
+        <Grid Grid.Row="4"
+              Background="{DynamicResource ControlBackgroundBrush}">
+            <Grid x:Name="RecommendationsTabContent">
+                <ScrollViewer VerticalScrollBarVisibility="Visible"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="12,0,12,12">
+
+                <!-- Assistant spotlight -->
+                <Border Style="{StaticResource Card}" Cursor="Arrow"
+                        Visibility="{Binding AssistantVisible, Converter={x:Static local:BoolToVisibilityConverter.Instance}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Margin="-6,-8,8,-8">
+                            <Ellipse Width="118" Height="118" Opacity="0.28"
+                                     HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush>
+                                        <GradientStop Color="#CCE58ABD" Offset="0"/>
+                                        <GradientStop Color="#0065D2C5" Offset="1"/>
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Image Source="{Binding AssistantFrameSource}"
+                                   Width="136" Height="136" MaxWidth="150" MaxHeight="150"
+                                   Stretch="Uniform"/>
+                        </Grid>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" MinWidth="120">
+                            <TextBlock Text="{Binding AssistantText}" Style="{StaticResource Meta}"
+                                       TextWrapping="Wrap" MaxHeight="58"
+                                       TextTrimming="CharacterEllipsis"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <Button Content="Owned news" Padding="8,4" FontSize="11"
+                                        Command="{Binding RefreshSpotlightCommand}"
+                                        IsEnabled="{Binding IsSpotlightLoading, Converter={x:Static local:InverseBoolConverter.Instance}}"/>
+                                <ProgressBar IsIndeterminate="True" Width="48" Height="4" Margin="8,0,0,0"
+                                             VerticalAlignment="Center"
+                                             Visibility="{Binding IsSpotlightLoading, Converter={x:Static local:BoolToVisibilityConverter.Instance}}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Recommendation review mode -->
+                <Border Style="{StaticResource Card}" Cursor="Arrow"
+                        Visibility="{Binding ShowReviewPanel, Converter={x:Static local:BoolToVisibilityConverter.Instance}}">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{Binding ReviewQueueSummary}" Style="{StaticResource Meta}"
+                                           FontWeight="Medium"/>
+                                <TextBlock Text="{Binding CurrentReviewRecommendation.Game.Name}"
+                                           Style="{StaticResource GameTitle}"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Background="{StaticResource ThemeChipBrush}" CornerRadius="3"
+                                    Padding="4,1" MaxWidth="96" Margin="8,0,0,0" VerticalAlignment="Top">
+                                <TextBlock Text="{Binding CurrentReviewRecommendation.PrimaryTag}" FontSize="10"
+                                           Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock Style="{StaticResource Meta}" Margin="0,2,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} · {1}">
+                                    <Binding Path="CurrentReviewRecommendation.Game.PlaytimeSeconds" Converter="{x:Static local:PlaytimeConverter.Instance}"/>
+                                    <Binding Path="CurrentReviewRecommendation.Game.SourcePlugin" FallbackValue="Unknown"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Text="{Binding CurrentReviewRecommendation.PrimaryReason}"
+                                   Style="{StaticResource Meta}"
+                                   Foreground="{DynamicResource PositiveBrush}"
+                                   TextWrapping="Wrap"
+                                   MaxHeight="42"
+                                   Margin="0,4,0,0"/>
+                        <WrapPanel Margin="0,10,0,0">
+                            <Button Content="{x:Static local:IconGlyphs.Play}"
+                                    Style="{StaticResource IconButton}"
+                                    ToolTip="Launch game"
+                                    AutomationProperties.Name="Launch review game"
+                                    Command="{Binding ReviewPlayCommand}"/>
+                            <Button Content="{x:Static local:IconGlyphs.Library}"
+                                    Style="{StaticResource IconButton}"
+                                    ToolTip="Go to library"
+                                    AutomationProperties.Name="Go to library from review"
+                                    Command="{Binding ReviewGoToLibraryCommand}"/>
+                            <Button Content="Save" Padding="8,4" FontSize="11" Margin="8,0,0,0"
+                                    Command="{Binding ReviewSaveCommand}"/>
+                            <Button Content="More like this" Padding="8,4" FontSize="11" Margin="6,0,0,0"
+                                    Command="{Binding ReviewMoreLikeThisCommand}"/>
+                            <Button Content="Less like this" Padding="8,4" FontSize="11" Margin="6,0,0,0"
+                                    Command="{Binding ReviewLessLikeThisCommand}"/>
+                            <Button Content="Reject"
+                                    Style="{StaticResource DangerActionButton}"
+                                    Margin="6,0,0,0"
+                                    Command="{Binding ReviewRejectCommand}"/>
+                            <Button Content="Prev" Padding="8,4" FontSize="11" Margin="12,0,0,0"
+                                    Command="{Binding ReviewPreviousCommand}"/>
+                            <Button Content="Next" Padding="8,4" FontSize="11" Margin="6,0,0,0"
+                                    Command="{Binding ReviewNextCommand}"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}" Cursor="Arrow"
+                        Visibility="{Binding ShowReviewEmptyState, Converter={x:Static local:BoolToVisibilityConverter.Instance}}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding ReviewQueueSummary}" Style="{StaticResource EmptyStateText}"/>
+                        <Button Content="Close review" Padding="10,4" FontSize="11"
+                                HorizontalAlignment="Center"
+                                Command="{Binding ToggleReviewModeCommand}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Recently played -->
+                <TextBlock Text="RECENTLY PLAYED" Style="{StaticResource SectionLabel}"
+                           Visibility="{Binding RecentlyPlayed.Count, Converter={x:Static local:CountToVisibilityConverter.Instance}}"/>
+                <ItemsControl ItemsSource="{Binding RecentlyPlayed}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource Card}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                        Command="{Binding DataContext.LaunchRecentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                                </Border.InputBindings>
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Name}" Style="{StaticResource GameTitle}"/>
+                                    <TextBlock Grid.Column="1" Style="{StaticResource Meta}"
+                                               Text="{Binding LastActivity, StringFormat='{}{0:MMM d}'}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Continue playing -->
+                <TextBlock Text="CONTINUE PLAYING" Style="{StaticResource SectionLabel}"
+                           Visibility="{Binding ContinueList.Count, Converter={x:Static local:CountToVisibilityConverter.Instance}}"/>
+                <ItemsControl ItemsSource="{Binding ContinueList}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource Card}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick"
+                                        Command="{Binding DataContext.DetailsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                                </Border.InputBindings>
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Game.Name}" Style="{StaticResource GameTitle}"/>
+                                        <Border Grid.Column="1" Background="{StaticResource ThemeChipBrush}" CornerRadius="3" Padding="4,1"
+                                                MaxWidth="92" Margin="4,0,0,0">
+                                            <TextBlock Text="{Binding StartedIntentLabel}" FontSize="10" Foreground="{DynamicResource TextBrush}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </Border>
+                                        <Button Grid.Column="2" Content="{x:Static local:IconGlyphs.Info}"
+                                                Style="{StaticResource IconButton}"
+                                                ToolTip="Show details"
+                                                AutomationProperties.Name="Show details"
+                                                Command="{Binding DataContext.DetailsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Grid.Column="3" Content="{x:Static local:IconGlyphs.Library}"
+                                                Style="{StaticResource IconButton}"
+                                                ToolTip="Go to library"
+                                                AutomationProperties.Name="Go to library"
+                                                Command="{Binding DataContext.GoToLibraryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Grid.Column="4" Content="{x:Static local:IconGlyphs.Play}"
+                                                Style="{StaticResource IconButton}"
+                                                ToolTip="Launch game"
+                                                AutomationProperties.Name="Launch game"
+                                                Command="{Binding DataContext.LaunchRecCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding PrimaryReason}" Style="{StaticResource Meta}" Margin="0,2,0,0"
+                                               TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding PrimaryReason}"
+                                               Visibility="{Binding Reasons.Count, Converter={x:Static local:CountToVisibilityConverter.Instance}}"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Recommendations -->
+                <TextBlock Text="{Binding GenreModeTitle}" Style="{StaticResource SectionLabel}"
+                           Visibility="{Binding FilteredRecommendations.Count, Converter={x:Static local:CountToVisibilityConverter.Instance}}"/>
+                <ItemsControl ItemsSource="{Binding FilteredRecommendations}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource Card}" ToolTipService.ShowDuration="10000">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick"
+                                        Command="{Binding DataContext.DetailsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                        Command="{Binding DataContext.LaunchRecCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                                </Border.InputBindings>
+                                <Border.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Game.Name}" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding WeightedScore, StringFormat='Weighted: {0:F2}'}"/>
+                                        <TextBlock Text="{Binding CosineScore, StringFormat='Cosine sim: {0:F2}'}"/>
+                                        <TextBlock Text="{Binding GraphScore, StringFormat='Steam graph: {0:F2}'}"/>
+                                        <TextBlock Text="{Binding NoveltyBonus, StringFormat='Novelty: {0:F2}'}"/>
+                                        <TextBlock Text="{Binding FusedScore, StringFormat='Final: {0:F2}'}"/>
+                                        <TextBlock Text="{Binding Game.SourcePlugin, StringFormat='Source: {0}'}"/>
+                                        <TextBlock Text="{Binding PrimaryReason}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                    </StackPanel>
+                                </Border.ToolTip>
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Game.Name}" Style="{StaticResource GameTitle}"/>
+                                        <!-- AI badge -->
+                                        <Border Grid.Column="1" Background="{StaticResource ThemeAccentSoftBrush}" BorderBrush="{StaticResource ThemeAccentBrush}"
+                                                BorderThickness="1" CornerRadius="3"
+                                                Padding="4,1" Margin="4,0" MaxWidth="28"
+                                                Visibility="{Binding AiRanked, Converter={x:Static local:BoolToVisibilityConverter.Instance}}">
+                                            <TextBlock Text="AI" FontSize="9" Foreground="{StaticResource ThemeFocusBrush}" FontWeight="Medium"/>
+                                        </Border>
+                                        <Border Grid.Column="2" Background="{StaticResource ThemeChipBrush}" CornerRadius="3" Padding="4,1"
+                                                MaxWidth="96" Margin="4,0,0,0">
+                                            <TextBlock Text="{Binding PrimaryTag}" FontSize="10" Foreground="{DynamicResource TextBrush}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </Border>
+                                        <Button Grid.Column="3" Content="{x:Static local:IconGlyphs.Info}"
+                                                Style="{StaticResource IconButton}"
+                                                ToolTip="Show details"
+                                                AutomationProperties.Name="Show details"
+                                                Command="{Binding DataContext.DetailsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Grid.Column="4" Content="{x:Static local:IconGlyphs.Library}"
+                                                Style="{StaticResource IconButton}"
+                                                ToolTip="Go to library"
+                                                AutomationProperties.Name="Go to library"
+                                                Command="{Binding DataContext.GoToLibraryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Grid.Column="5" Content="Reject"
+                                                Style="{StaticResource DangerActionButton}"
+                                                ToolTip="Reject recommendation"
+                                                AutomationProperties.Name="Reject recommendation"
+                                                Command="{Binding DataContext.RejectRecommendationCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/>
+                                    </Grid>
+                                    <TextBlock Style="{StaticResource Meta}" Margin="0,2,0,0">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} · {1}">
+                                                <Binding Path="Game.PlaytimeSeconds" Converter="{x:Static local:PlaytimeConverter.Instance}"/>
+                                                <Binding Path="Game.SourcePlugin" FallbackValue="Unknown"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding PrimaryReason}" Style="{StaticResource Meta}"
+                                               Foreground="{DynamicResource PositiveBrush}" Margin="0,2,0,0"
+                                               TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding PrimaryReason}"
+                                               Visibility="{Binding Reasons.Count, Converter={x:Static local:CountToVisibilityConverter.Instance}}"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Border Style="{StaticResource Card}" Cursor="Arrow"
+                        Visibility="{Binding ShowRecommendationsEmptyState, Converter={x:Static local:BoolToVisibilityConverter.Instance}}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding RecommendationsEmptyStateText}" Style="{StaticResource EmptyStateText}"/>
+                        <Button Content="Refresh" Padding="10,4" FontSize="11"
+                                HorizontalAlignment="Center"
+                                Command="{Binding RefreshCommand}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Games outside your library -->
+                <TextBlock Text="GAMES YOU DON'T OWN" Style="{StaticResource SectionLabel}"
+                           Visibility="{Binding ShowNotOwnedSection, Converter={x:Static local:BoolToVisibilityConverter.Instance}}"/>
+                <ItemsControl ItemsSource="{Binding NotOwnedRecommendations}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource Card}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                        Command="{Binding DataContext.OpenDealCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                                </Border.InputBindings>
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Title}" Style="{StaticResource GameTitle}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding RecommendationKindText}" Style="{StaticResource Meta}" Margin="8,0,0,0"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding PrimaryReason}" Style="{StaticResource Meta}"
+                                               Foreground="{DynamicResource PositiveBrush}" Margin="0,2,0,0"
+                                               TextWrapping="Wrap"
+                                               Visibility="{Binding Reasons.Count, Converter={x:Static local:CountToVisibilityConverter.Instance}}"/>
+                                    <TextBlock Style="{StaticResource Meta}" Margin="0,2,0,0"
+                                               TextTrimming="CharacterEllipsis">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} · {1}">
+                                                <Binding Path="Store" FallbackValue="External"/>
+                                                <Binding Path="QualityLabel" FallbackValue="Quality unknown"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding SecondaryReason}" Style="{StaticResource Meta}" Margin="0,2,0,0"
+                                               TextWrapping="Wrap"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Text="DEALS" Style="{StaticResource SectionLabel}"
+                           Visibility="{Binding ExternalRecommendations.Count, Converter={x:Static local:CountToVisibilityConverter.Instance}}"/>
+                <ItemsControl ItemsSource="{Binding ExternalRecommendations}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource Card}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                        Command="{Binding DataContext.OpenDealCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                                </Border.InputBindings>
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Title}" Style="{StaticResource GameTitle}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding PriceText}" Style="{StaticResource Meta}" Margin="8,0,0,0"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding Reasons[0]}" Style="{StaticResource Meta}"
+                                               Foreground="{DynamicResource PositiveBrush}" Margin="0,2,0,0"
+                                               TextWrapping="Wrap"
+                                               Visibility="{Binding Reasons.Count, Converter={x:Static local:CountToVisibilityConverter.Instance}}"/>
+                                    <TextBlock Style="{StaticResource Meta}" Margin="0,2,0,0">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} · {1} · Match {2:F2}">
+                                                <Binding Path="Store" FallbackValue="Store"/>
+                                                <Binding Path="QualityLabel" FallbackValue="Quality unknown"/>
+                                                <Binding Path="MatchScore"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding SecondaryReason}" Style="{StaticResource Meta}" Margin="0,2,0,0"
+                                               TextWrapping="Wrap"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Border Style="{StaticResource Card}" Cursor="Arrow"
+                        Visibility="{Binding ShowDealsEmptyState, Converter={x:Static local:BoolToVisibilityConverter.Instance}}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="No matching current deals found." Style="{StaticResource EmptyStateText}"/>
+                        <Button Content="Refresh" Padding="10,4" FontSize="11"
+                                HorizontalAlignment="Center"
+                                Command="{Binding FindDealsCommand}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}" Cursor="Arrow"
+                        Visibility="{Binding ShowNotOwnedEmptyState, Converter={x:Static local:BoolToVisibilityConverter.Instance}}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="No matching games outside your library found." Style="{StaticResource EmptyStateText}"/>
+                        <Button Content="Refresh" Padding="10,4" FontSize="11"
+                                HorizontalAlignment="Center"
+                                Command="{Binding FindNotOwnedCommand}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Owned game updates -->
+                <TextBlock Text="OWNED GAME UPDATES" Style="{StaticResource SectionLabel}"
+                           Visibility="{Binding Spotlights.Count, Converter={x:Static local:CountToVisibilityConverter.Instance}}"/>
+                <ItemsControl ItemsSource="{Binding Spotlights}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource Card}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                        Command="{Binding DataContext.OpenSpotlightCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                                </Border.InputBindings>
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Title}" Style="{StaticResource GameTitle}"
+                                                   TextWrapping="Wrap" MaxHeight="36"/>
+                                        <TextBlock Grid.Column="1" Style="{StaticResource Meta}" Margin="8,0,0,0">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} · {1}">
+                                                    <Binding Path="Source"/>
+                                                    <Binding Path="PublishedText"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+                                    <TextBlock Text="{Binding Summary}" Style="{StaticResource Meta}"
+                                               TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                               MaxHeight="34" Margin="0,2,0,0"/>
+                                    <TextBlock Text="{Binding Reason}" Style="{StaticResource Meta}"
+                                               Foreground="{DynamicResource PositiveBrush}" TextWrapping="Wrap"
+                                               TextTrimming="CharacterEllipsis" MaxHeight="17" Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        <!-- Footer with buttons -->
+        <Border Grid.Row="5" Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="0,1,0,0"
+                Padding="12,6">
+            <DockPanel LastChildFill="True">
+                <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="8,0,0,0">
+                    <Button Content="Export" Style="{StaticResource FooterButton}"
+                            Command="{Binding ExportCommand}"
+                            ToolTip="Copy library context to clipboard for pasting into AI chats"/>
+                    <Button Content="Not Owned" Style="{StaticResource FooterButton}"
+                            Command="{Binding FindNotOwnedCommand}">
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{x:Static local:AllFalseConverter.Instance}">
+                                <Binding Path="IsDealsLoading"/>
+                                <Binding Path="IsLoading"/>
+                            </MultiBinding>
+                        </Button.IsEnabled>
+                    </Button>
+                    <Button Content="Deals" Style="{StaticResource FooterButton}"
+                            Command="{Binding FindDealsCommand}">
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{x:Static local:AllFalseConverter.Instance}">
+                                <Binding Path="IsDealsLoading"/>
+                                <Binding Path="IsLoading"/>
+                            </MultiBinding>
+                        </Button.IsEnabled>
+                    </Button>
+                    <Button Content="News" Style="{StaticResource FooterButton}"
+                            Command="{Binding RefreshSpotlightCommand}">
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{x:Static local:AllFalseConverter.Instance}">
+                                <Binding Path="IsSpotlightLoading"/>
+                                <Binding Path="IsLoading"/>
+                            </MultiBinding>
+                        </Button.IsEnabled>
+                    </Button>
+                    <Button Content="Settings" Style="{StaticResource FooterButton}"
+                            Command="{Binding OpenSettingsCommand}"/>
+                    <Button Content="Metadata" Style="{StaticResource FooterButton}"
+                            Command="{Binding RefreshMetadataCommand}"
+                            IsEnabled="{Binding IsLoading, Converter={x:Static local:InverseBoolConverter.Instance}}"/>
+                    <Button Content="Refresh" Style="{StaticResource FooterButton}"
+                            Command="{Binding RefreshCommand}"
+                            IsEnabled="{Binding IsLoading, Converter={x:Static local:InverseBoolConverter.Instance}}"/>
+                </WrapPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding StatusText}"
+                           Style="{StaticResource Meta}" VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis" MinWidth="80"/>
+                    <ProgressBar IsIndeterminate="True" Width="54" Height="4" Margin="8,0,0,0"
+                                 VerticalAlignment="Center">
+                        <ProgressBar.Visibility>
+                            <MultiBinding Converter="{x:Static local:AnyTrueToVisibilityConverter.Instance}">
+                                <Binding Path="IsDealsLoading"/>
+                                <Binding Path="IsSpotlightLoading"/>
+                            </MultiBinding>
+                        </ProgressBar.Visibility>
+                    </ProgressBar>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.RowSpan="6" Panel.ZIndex="20"
+                Background="{DynamicResource ControlBackgroundBrush}"
+                Visibility="{Binding ShowLoadingView, Converter={x:Static local:BoolToVisibilityConverter.Instance}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="24">
+                <ProgressBar IsIndeterminate="True" Width="160" Height="6" Margin="0,0,0,14"/>
+                <TextBlock Text="Refreshing your library" FontSize="14" FontWeight="Medium"
+                           Foreground="{DynamicResource TextBrush}"
+                           HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                <TextBlock Text="{Binding StatusText}" Style="{StaticResource EmptyStateText}"
+                           MaxWidth="280"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

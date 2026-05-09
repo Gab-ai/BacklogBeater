@@ -1,0 +1,37 @@
+# AI / planning / private notes
+PLANS.md
+ideas.md
+notes.md
+codex-notes.md
+ai-notes.md
+scratch/
+prompts/
+.local/
+AGENTS.md
+codex.md
+SCORING.md
+
+# Visual Studio / local IDE cache
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+
+# Secrets / local config
+.env
+*.env
+secrets.json
+
+
+# Playnite package output
+*.pext
+
+# OS junk
+Thumbs.db
+desktop.ini
+.DS_Store

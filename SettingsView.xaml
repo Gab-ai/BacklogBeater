@@ -1,0 +1,606 @@
+<UserControl x:Class="GameRecommender.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GameRecommender">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="TextBrush" Color="#EEF3F8"/>
+        <SolidColorBrush x:Key="TextBrushDarker" Color="#A9B5C6"/>
+        <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#121821"/>
+        <SolidColorBrush x:Key="NormalBorderBrush" Color="#2B3646"/>
+        <SolidColorBrush x:Key="NormalBrush" Color="#263244"/>
+        <SolidColorBrush x:Key="PositiveBrush" Color="#65D2C5"/>
+        <SolidColorBrush x:Key="WarningBrush" Color="#F3C36B"/>
+        <SolidColorBrush x:Key="ThemeSurfaceBrush" Color="#18212D"/>
+        <SolidColorBrush x:Key="ThemeSurfaceHoverBrush" Color="#202B3A"/>
+        <SolidColorBrush x:Key="ThemeAccentBrush" Color="#65D2C5"/>
+        <SolidColorBrush x:Key="ThemeAccentSoftBrush" Color="#23434A"/>
+        <SolidColorBrush x:Key="ThemeDangerBrush" Color="#CF737C"/>
+        <SolidColorBrush x:Key="ThemeDisabledBrush" Color="#657184"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#18212D"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#EEF3F8"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#EEF3F8"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#18212D"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.MenuBrushKey}" Color="#18212D"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="#EEF3F8"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#23434A"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#EEF3F8"/>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource ThemeSurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource ThemeAccentBrush}"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource ThemeAccentSoftBrush}"/>
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Background" Value="{StaticResource ThemeSurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource ThemeAccentBrush}"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource ThemeAccentSoftBrush}"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="{StaticResource ThemeSurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="{StaticResource ThemeSurfaceBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="ItemBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource ThemeSurfaceHoverBrush}"/>
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="{StaticResource ThemeAccentSoftBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource ThemeAccentSoftBrush}"/>
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="{StaticResource ThemeAccentBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource ThemeDisabledBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="AssistantVoiceComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="Background" Value="{StaticResource ThemeSurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                          Background="{TemplateBinding Background}"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                          Focusable="False"
+                                          IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                          ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="Chrome"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="3">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="28"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ContentPresenter Grid.Column="0"
+                                                                  Margin="8,3,4,3"
+                                                                  HorizontalAlignment="Left"
+                                                                  VerticalAlignment="Center"
+                                                                  RecognizesAccessKey="True"
+                                                                  Content="{TemplateBinding Content}"
+                                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                  ContentStringFormat="{TemplateBinding ContentStringFormat}"/>
+                                                <Path Grid.Column="1"
+                                                      Width="8"
+                                                      Height="5"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Fill="{DynamicResource TextBrushDarker}"
+                                                      Data="M 0 0 L 8 0 L 4 5 Z"/>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource ThemeSurfaceHoverBrush}"/>
+                                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource ThemeAccentSoftBrush}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="Chrome" Property="Background" Value="{StaticResource ThemeAccentSoftBrush}"/>
+                                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource ThemeAccentBrush}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter TargetName="Chrome" Property="Opacity" Value="0.65"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <Popup x:Name="Popup"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   PopupAnimation="Fade">
+                                <Grid MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border Background="{StaticResource ThemeSurfaceBrush}"
+                                            BorderBrush="{StaticResource ThemeAccentSoftBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="3">
+                                        <ScrollViewer CanContentScroll="True">
+                                            <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="False">
+                                <Setter TargetName="Popup" Property="MinHeight" Value="32"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource ThemeDisabledBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ThemeSurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ThemeAccentSoftBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource ThemeAccentBrush}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{StaticResource ThemeDisabledBrush}"/>
+                    <Setter Property="Opacity" Value="0.65"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="{DynamicResource ControlBackgroundBrush}">
+        <StackPanel Margin="16">
+
+            <!-- Feature status -->
+            <TextBlock Text="Feature status" FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+            <TextBlock Text="{Binding FeatureStatusText}" FontSize="11"
+                       Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,0,0,8"/>
+            <Button Content="Test configured services" Padding="8,4" FontSize="12"
+                    HorizontalAlignment="Left"
+                    Command="{Binding TestConnectionsCommand}"/>
+            <TextBlock Text="{Binding SettingsStatusText}" FontSize="11"
+                       Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,4,0,0"/>
+
+            <Separator Margin="0,16"/>
+
+            <!-- Core setup -->
+            <TextBlock Text="Core library and enrichment" FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+            <CheckBox Content="Fetch enrichment data from Steam and IGDB (7-day cache)"
+                      IsChecked="{Binding EnrichmentEnabled}"
+                      FontSize="12"/>
+
+            <TextBlock Text="Steam API key" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,8,0,2"/>
+            <TextBox Text="{Binding SteamApiKey}" FontSize="12" Padding="6,4"/>
+            <TextBlock Text="Optional. Used for Steam taste data, tags, graph signals, and Steam-backed discovery."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0"/>
+            <TextBlock Text="From store.steampowered.com/dev/apikey" FontSize="11"
+                       Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0"/>
+
+            <TextBlock Text="Steam User ID (64-bit)" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,10,0,2"/>
+            <TextBox Text="{Binding SteamUserId}" FontSize="12" Padding="6,4"/>
+            <TextBlock Text="e.g. 76561198965573867 - find yours at steamdb.info" FontSize="11"
+                       Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0"/>
+
+            <TextBlock Text="IGDB client ID" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,10,0,2"/>
+            <TextBox Text="{Binding IgdbClientId}" FontSize="12" Padding="6,4"/>
+
+            <TextBlock Text="IGDB client secret" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,10,0,2"/>
+            <PasswordBox x:Name="IgdbSecretBox" FontSize="12" Padding="6,4"/>
+            <TextBlock Text="Optional. Register free at dev.twitch.tv; used for IGDB themes, keywords, websites, and metadata."
+                       Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0"/>
+
+            <TextBlock Text="RAWG API key" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,10,0,2"/>
+            <PasswordBox x:Name="RawgKeyBox" FontSize="12" Padding="6,4"/>
+            <TextBlock Text="Optional. Used as supplemental metadata only; RAWG will not override stronger Steam, IGDB, Playnite, rejection, or blacklist signals."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+            <TextBlock Text="From rawg.io/apidocs"
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0"/>
+
+            <!-- AI re-ranking -->
+            <TextBlock Text="AI re-ranker (optional)" FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+
+            <CheckBox Content="Enable AI re-ranking"
+                      IsChecked="{Binding AiRerankerEnabled}"
+                      FontSize="12" Margin="0,0,0,8"/>
+
+            <TextBlock Text="Anthropic API key" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,2"/>
+            <PasswordBox x:Name="AnthropicKeyBox" FontSize="12" Padding="6,4"
+                         IsEnabled="{Binding AiRerankerEnabled}"/>
+            <TextBlock Text="From console.anthropic.com. Used only when Claude re-ranking is enabled."
+                       Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,4">
+                <RadioButton Content="Claude" IsChecked="{Binding IsClaudeSelected}" FontSize="12" Margin="0,0,12,0"/>
+                <RadioButton Content="OpenAI" IsChecked="{Binding IsOpenAiSelected}" FontSize="12"/>
+            </StackPanel>
+
+            <TextBlock Text="OpenAI API key" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,6,0,2"/>
+            <PasswordBox x:Name="OpenAiKeyBox" FontSize="12" Padding="6,4"
+                         IsEnabled="{Binding AiRerankerEnabled}"/>
+            <TextBlock Text="Used only when OpenAI re-ranking is enabled."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0"/>
+
+            <TextBlock Text="OpenAI model" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,10,0,2"/>
+            <TextBox Text="{Binding OpenAiModel}" FontSize="12" Padding="6,4"
+                     IsEnabled="{Binding AiRerankerEnabled}"/>
+
+            <TextBlock Text="Candidates sent to AI" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,10,0,2"/>
+            <Slider Minimum="5" Maximum="40" Value="{Binding AiCandidateCount}"
+                    IsSnapToTickEnabled="True" TickFrequency="5"
+                    IsEnabled="{Binding AiRerankerEnabled}"/>
+            <TextBlock FontSize="11" Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0">
+                <TextBlock.Text>
+                    <Binding Path="AiCandidateCount" StringFormat="Top {0} games sent per call"/>
+                </TextBlock.Text>
+            </TextBlock>
+
+            <Separator Margin="0,16"/>
+
+            <!-- Deals -->
+            <TextBlock Text="Deals" FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+
+            <TextBlock Text="IsThereAnyDeal API key" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,2"/>
+            <PasswordBox x:Name="ItadKeyBox" FontSize="12" Padding="6,4"/>
+            <TextBlock Text="Optional. Used only when you click the deals recommendation button."
+                       Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0"/>
+            <CheckBox Content="Include JAST Store sales"
+                      IsChecked="{Binding EnableJastDeals}"
+                      FontSize="12" Margin="0,10,0,6"/>
+            <CheckBox Content="Include MangaGamer sales"
+                      IsChecked="{Binding EnableMangaGamerDeals}"
+                      FontSize="12" Margin="0,0,0,6"/>
+            <CheckBox Content="Hide stale Early Access external recommendations"
+                      IsChecked="{Binding HideStaleEarlyAccessRecommendations}"
+                      FontSize="12" Margin="0,8,0,6"/>
+            <CheckBox Content="Hide all Early Access external recommendations"
+                      IsChecked="{Binding HideEarlyAccessRecommendations}"
+                      FontSize="12" Margin="0,0,0,6"/>
+            <TextBlock Text="JAST and MangaGamer are optional sale sources. They are checked on demand and may include visual novel/adult storefront catalogs."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,2,0,0"/>
+            <TextBlock Text="Early Access filtering applies to Deals and Games You Don't Own after Steam metadata is checked. Stale means no recent Steam news/update evidence in the last 12 months."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,2,0,0"/>
+
+            <Separator Margin="0,16"/>
+
+            <!-- Minecraft playtime -->
+            <TextBlock Text="Minecraft playtime" FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+
+            <TextBlock Text="Minecraft launcher paths" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,2"/>
+            <TextBox Text="{Binding MinecraftLauncherPaths}" FontSize="12" Padding="6,4"/>
+            <TextBlock Text="Optional semicolon-separated Prism, Modrinth, CurseForge, or portable instance paths. Standard Windows paths are scanned automatically. Detected modpack time is added only to Minecraft: Java Edition."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                <Button Content="Preview Minecraft time" Padding="8,4" FontSize="12"
+                        Command="{Binding PreviewMinecraftModpacksCommand}"/>
+                <Button Content="Add time to Minecraft" Padding="8,4" FontSize="12" Margin="8,0,0,0"
+                        Command="{Binding ApplyMinecraftModpacksCommand}"/>
+            </StackPanel>
+
+            <Separator Margin="0,16"/>
+
+            <!-- Advanced recommendation controls -->
+            <Expander Header="Advanced recommendation controls" Foreground="{DynamicResource TextBrush}"
+                      IsExpanded="False" Margin="0,0,0,0">
+                <StackPanel Margin="0,8,0,0">
+                    <TextBlock Text="Recommendation preset" FontSize="14" FontWeight="Medium"
+                               Foreground="{DynamicResource TextBrush}" Margin="0,0,0,4"/>
+                    <ComboBox ItemsSource="{Binding RecommendationPresetOptions}"
+                              SelectedItem="{Binding SelectedRecommendationPreset}"
+                              FontSize="12"
+                              Padding="6,4"
+                              Margin="0,0,0,4"/>
+                    <TextBlock Text="Presets tune the owned-library recommendation balance. Moving any slider switches this setting to Custom."
+                               FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                               TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                    <TextBlock Text="Scoring engine weights" FontSize="14" FontWeight="Medium"
+                               Foreground="{DynamicResource TextBrush}" Margin="0,0,0,4"/>
+                    <TextBlock Text="Balanced default: 0.35 / 0.35 / 0.30. Some presets leave room for novelty and quality influence."
+                               FontSize="11" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,12"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="120"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="48"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Weighted scorer"
+                                   FontSize="12" VerticalAlignment="Center" Margin="0,0,8,8"/>
+                        <Slider Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="1"
+                                Value="{Binding WeightedEngineWeight}" Margin="0,0,0,8"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" FontSize="12" VerticalAlignment="Center" Margin="4,0,0,8">
+                            <TextBlock.Text><Binding Path="WeightedEngineWeight" StringFormat="{}{0:F2}"/></TextBlock.Text>
+                        </TextBlock>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Cosine similarity"
+                                   FontSize="12" VerticalAlignment="Center" Margin="0,0,8,8"/>
+                        <Slider Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="1"
+                                Value="{Binding CosineEngineWeight}" Margin="0,0,0,8"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" FontSize="12" VerticalAlignment="Center" Margin="4,0,0,8">
+                            <TextBlock.Text><Binding Path="CosineEngineWeight" StringFormat="{}{0:F2}"/></TextBlock.Text>
+                        </TextBlock>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Steam graph"
+                                   FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <Slider Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="1"
+                                Value="{Binding GraphEngineWeight}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" FontSize="12" VerticalAlignment="Center" Margin="4,0,0,0">
+                            <TextBlock.Text><Binding Path="GraphEngineWeight" StringFormat="{}{0:F2}"/></TextBlock.Text>
+                        </TextBlock>
+                    </Grid>
+
+                    <TextBlock Text="Novelty bonus strength" FontSize="12"
+                               Foreground="{DynamicResource TextBrushDarker}" Margin="0,12,0,2"/>
+                    <Slider Minimum="0" Maximum="0.5" Value="{Binding NoveltyBonusStrength}"/>
+                    <TextBlock FontSize="11" Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0">
+                        <TextBlock.Text>
+                            <Binding Path="NoveltyBonusStrength" StringFormat="Boost for genre diversity: {0:F2}"/>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <TextBlock Text="Quality influence" FontSize="12"
+                               Foreground="{DynamicResource TextBrushDarker}" Margin="0,12,0,2"/>
+                    <Slider Minimum="0" Maximum="1.5" Value="{Binding QualityWeightStrength}"/>
+                    <TextBlock FontSize="11" Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0">
+                        <TextBlock.Text>
+                            <Binding Path="QualityWeightStrength" StringFormat="Review and metadata quality strength: {0:F2}x"/>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+            </Expander>
+
+            <Separator Margin="0,16"/>
+
+            <!-- Recommendation blacklists -->
+            <TextBlock Text="Recommendation blacklists" FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource TextBrush}" Margin="0,0,0,4"/>
+            <TextBlock Text="{Binding BlacklistSummary}"
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+            <TextBlock Text="Blocked sources" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,2"/>
+            <TextBox Text="{Binding BlacklistedPlatformsText, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="12" Padding="6,4"/>
+            <TextBlock Text="Semicolon-separated Playnite sources, e.g. Steam; Epic. Matches the recommendation Source value exactly after trimming."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,2,0,8"/>
+
+            <TextBlock Text="Blocked tags" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,2"/>
+            <TextBox Text="{Binding BlacklistedTagsText, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="12" Padding="6,4"/>
+            <TextBlock Text="Semicolon-separated Playnite tags. This does not match genres, themes, keywords, or generated tags."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,2,0,8"/>
+
+            <TextBlock Text="Blocked games" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,2"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         Text="{Binding NewBlacklistedGameName, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="12" Padding="6,4"/>
+                <Button Grid.Column="1"
+                        Content="Add"
+                        Padding="8,4"
+                        FontSize="12"
+                        Margin="8,0,0,0"
+                        Command="{Binding AddBlacklistedGameCommand}"/>
+            </Grid>
+            <TextBlock Text="Manual entries match recommendation titles case-insensitively after punctuation is removed."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,2,0,8"/>
+            <TextBlock Text="No blocked games yet."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,0,0,8"
+                       Visibility="{Binding ShowBlacklistedGamesEmptyState, Converter={x:Static local:BoolToVisibilityConverter.Instance}}"/>
+            <ItemsControl ItemsSource="{Binding BlacklistedGames}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource TextBrushDarker}"
+                                Padding="0,6">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Medium"
+                                               Foreground="{DynamicResource TextBrush}"/>
+                                    <TextBlock Text="{Binding ReasonText}" FontSize="11"
+                                               Foreground="{DynamicResource TextBrushDarker}"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <Button Grid.Column="1" Content="Remove" Padding="8,3" FontSize="12"
+                                        Margin="8,0,0,0" VerticalAlignment="Center"
+                                        Command="{Binding DataContext.RemoveBlacklistedGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Separator Margin="0,16"/>
+
+            <!-- Spotlight assistant -->
+            <TextBlock Text="Spotlight assistant and sounds" FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+            <CheckBox Content="Show current game-news spotlight"
+                      IsChecked="{Binding SpotlightEnabled}"
+                      FontSize="12" Margin="0,0,0,6"/>
+            <CheckBox Content="Show anime guide mascot"
+                      IsChecked="{Binding AnimeAssistantEnabled}"
+                      FontSize="12" Margin="0,0,0,6"/>
+            <TextBlock Text="Assistant voice" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,6,0,2"/>
+            <ComboBox SelectedValue="{Binding AssistantVoice}"
+                      SelectedValuePath="Content"
+                      IsEditable="False"
+                      FontSize="12"
+                      Padding="6,4"
+                      Style="{StaticResource AssistantVoiceComboBoxStyle}">
+                <ComboBoxItem Content="Waifu"/>
+                <ComboBoxItem Content="Neutral"/>
+                <ComboBoxItem Content="Hostile"/>
+            </ComboBox>
+            <TextBlock Text="Spotlight cards show source and date; assistant voice controls mascot message tone." FontSize="11"
+                       Foreground="{DynamicResource TextBrushDarker}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+
+            <CheckBox Content="Enable sound effects"
+                      IsChecked="{Binding SoundEffectsEnabled}"
+                      FontSize="12" Margin="0,10,0,6"/>
+            <TextBlock Text="Sound volume" FontSize="12" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,2"/>
+            <Slider Minimum="0.1" Maximum="1" Value="{Binding SoundEffectsVolume}"
+                    IsEnabled="{Binding SoundEffectsEnabled}"/>
+            <TextBlock FontSize="11" Foreground="{DynamicResource TextBrushDarker}" Margin="0,2,0,0">
+                <TextBlock.Text>
+                    <Binding Path="SoundEffectsVolume" StringFormat="Volume: {0:P0}"/>
+                </TextBlock.Text>
+            </TextBlock>
+
+            <Separator Margin="0,16"/>
+
+            <!-- Updates -->
+            <TextBlock Text="Updates" FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+            <TextBlock FontSize="11" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,8">
+                <TextBlock.Text>
+                    <Binding Path="CurrentExtensionVersion" StringFormat="Current version: {0}"/>
+                </TextBlock.Text>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                <Button Content="Check for updates" Padding="8,4" FontSize="12"
+                        Command="{Binding CheckForUpdatesCommand}"/>
+                <Button Content="Open update page" Padding="8,4" FontSize="12" Margin="8,0,0,0"
+                        Command="{Binding OpenUpdatePageCommand}"
+                        Visibility="{Binding ShowOpenUpdatePage, Converter={x:Static local:BoolToVisibilityConverter.Instance}}"/>
+            </StackPanel>
+            <TextBlock Text="{Binding UpdateStatusText}" FontSize="11"
+                       Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,0,0,0"/>
+
+            <Separator Margin="0,16"/>
+
+            <!-- Rejected games -->
+            <TextBlock FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource TextBrush}" Margin="0,0,0,4">
+                <TextBlock.Text>
+                    <Binding Path="RejectedGamesCount" StringFormat="Rejected recommendations ({0})"/>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Text="Restored games can appear again after the next refresh or rescore."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,0,0,8"/>
+            <TextBlock Text="No rejected recommendations yet."
+                       FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                       TextWrapping="Wrap" Margin="0,0,0,8"
+                       Visibility="{Binding ShowRejectedGamesEmptyState, Converter={x:Static local:BoolToVisibilityConverter.Instance}}"/>
+            <ItemsControl ItemsSource="{Binding RejectedGames}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource TextBrushDarker}"
+                                Padding="0,6">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Medium"
+                                               Foreground="{DynamicResource TextBrush}"/>
+                                    <TextBlock FontSize="11" Foreground="{DynamicResource TextBrushDarker}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} · rejected {1:g}">
+                                                <Binding Path="SourcePlugin" FallbackValue="Unknown"/>
+                                                <Binding Path="RejectedAt"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding ReasonCode, StringFormat=Reason: {0}}"
+                                               FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding ReasonText}"
+                                               FontSize="11" Foreground="{DynamicResource TextBrushDarker}"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <Button Grid.Column="1" Content="Restore" Padding="8,3" FontSize="12"
+                                        Margin="8,0,0,0" VerticalAlignment="Center"
+                                        Command="{Binding DataContext.RestoreRejectedGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

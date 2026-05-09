@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameRecommender", "GameRecommender.csproj", "{24530F44-06AF-940C-537D-F4D2567C49C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameRecommender.Tests", "tests\GameRecommender.Tests\GameRecommender.Tests.csproj", "{8C06A523-10B7-4C88-A07E-7156E766857B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24530F44-06AF-940C-537D-F4D2567C49C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24530F44-06AF-940C-537D-F4D2567C49C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24530F44-06AF-940C-537D-F4D2567C49C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24530F44-06AF-940C-537D-F4D2567C49C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C06A523-10B7-4C88-A07E-7156E766857B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C06A523-10B7-4C88-A07E-7156E766857B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C06A523-10B7-4C88-A07E-7156E766857B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C06A523-10B7-4C88-A07E-7156E766857B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B21DB4C0-C31C-4F4D-9AB2-803904BFA8DC}
+	EndGlobalSection
+EndGlobal
